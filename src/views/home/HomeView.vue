@@ -27,7 +27,7 @@ export default {
 
 <style scoped>
 .landing-hero {
-  background: url('/public/doraemon-desktop.png') no-repeat center center;
+  background: url('../../assets/img/front-pages/backgrounds/doraemon-desktop.png') no-repeat center center;
   background-size: cover;
   min-height: 100vh;
   border-radius: 0;
@@ -37,7 +37,7 @@ export default {
 /* 为手机屏幕设置不同的背景图片 */
 @media (max-width: 575.98px) {
   .landing-hero {
-    background: url('/public/doraemon-mobile.png') no-repeat center center;
+    background: url('../../assets/img/front-pages/backgrounds/doraemon-mobile.png') no-repeat center center;
     background-size: cover;
   }
 }
