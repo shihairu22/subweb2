@@ -57,7 +57,7 @@
                     <div class="col-12 d-flex flex-wrap">
                       <input class="form-control" placeholder="Exclude: 可选" v-model="moreConfig.exclude" />
                     </div>
-                    <div class="col-md check-div" :style="{ display: 'flex', flexWrap: 'wrap' }">
+                     <div class="col-md check-div" :style="{ display: 'flex', flexWrap: 'wrap' }">
                       <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="emoji" v-model="moreConfig.emoji" />
                         <label class="form-check-label" for="emoji">Emoji</label>
@@ -65,6 +65,14 @@
                       <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="udp" v-model="moreConfig.udp" />
                         <label class="form-check-label" for="udp">开启UDP</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="xudp" v-model="moreConfig.xudp" />
+                        <label class="form-check-label" for="xudp">开启XUDP</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="tls13" v-model="moreConfig.tls13" />
+                        <label class="form-check-label" for="tls13">开启TLS_1.3</label>
                       </div>
                       <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="sort" v-model="moreConfig.sort" />
@@ -150,6 +158,7 @@ export default {
         { value: 'surge&ver=2', text: 'SurgeV2' },
         { value: 'surge&ver=3', text: 'SurgeV3' },
         { value: 'surge&ver=4', text: 'SurgeV4' },
+        { value: 'surge&ver=5', text: 'SurgeV5' },
         { value: 'surfboard', text: 'Surfboard' },
         { value: 'ss', text: 'SS (SIP002)' },
         { value: 'sssub', text: 'SS Android' },
