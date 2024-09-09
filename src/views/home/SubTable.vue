@@ -1,16 +1,16 @@
 <template>
   <div class="row g-4 custom-div">
     <div class="col-12 col-lg-12 pt-4 pt-lg-0">
-      <div class="tab-content p-0">
+      <div class="tab-content p-0 ">
         <div class="tab-pane fade show active">
-          <div class="card mb-4">
+          <div class="card mb-4 glass-effect">
             <div class="card-body">
               <div class="row mb-3 g-3">
-                <div class="col-12 col-md-12">
+                <div class="col-12">
                   <label class="form-label" for="add-user-email">订阅链接</label>
                   <textarea class="form-control" v-model.trim="urls" :placeholder="placeholder" rows="3"></textarea>
                 </div>
-                <div class="col-5 col-md-6">
+                <div class="col-12 col-md-6">
                   <label class="form-label" for="client">客户端</label>
                   <select class="form-select" id="client" v-model="target" @change="selectTarget">
                     <option v-for="option in targetOptions" :key="option" :value="option.value">
@@ -18,42 +18,43 @@
                     </option>
                   </select>
                 </div>
-                <div class="col-7 col-md-6">
+                <div class="col-12 col-md-6">
                   <label class="form-label" for="api">后端服务</label>
                   <select class="form-select" id="api" @change="selectApi">
-                    <option :value="apiUrl">
-                      {{ apiUrl }}
+                    <option value="">请选择后端</option>
+                    <option v-for="option in apiUrl" :key="option" :value="option.value">
+                      {{ option.text }}
                     </option>
                     <option value="manual">自定义后端 API 地址</option>
                   </select>
                 </div>
                 <div class="col-12 col-md-12" v-if="isShowManualApiUrl">
-                  <input class="form-control" placeholder="自定义后端 API 地址示例：https://sub.ops.ci" v-model="api" />
+                  <input class="form-control" placeholder="自定义后端API地址" v-model="api" />
                 </div>
-                <div class="col-8 col-md-10">
+                <div class="col-12 col-md-10">
                   <label class="form-label" for="remote">远程配置</label>
                   <select class="form-select" id="remote" @change="selectRemoteConfig">
-                    <option value="">默认配置</option>
+                    <option value="">请选择配置</option>
                     <option v-for="option in remoteConfigOptions" :key="option" :value="option.value">
                       {{ option.text }}
                     </option>
                     <option value="manual">自定义远程配置地址</option>
                   </select>
                 </div>
-                <div class="col-4 col-md-2">
+                <div class="col-12 col-md-2 d-flex align-items-end">
                   <label class="form-label">&nbsp;</label>
-                  <button type="button" class="btn btn-warning" @click="showMoreConfig">参数</button>
+                  <button type="button" class="btn btn-warning w-100" @click="showMoreConfig">参数</button>
                 </div>
-                <div class="col-12 col-md-12" v-if="isShowRemoteConfig">
-                  <input class="form-control" placeholder="自定义远程配置地址：" v-model="remoteConfig" />
+                <div class="col-12" v-if="isShowRemoteConfig">
+                  <input class="form-control" placeholder="自定义远程配置地址" v-model="remoteConfig" />
                 </div>
                 <div class="col-12 col-md-12" v-if="isShowMoreConfig">
                   <label class="form-label" for="add-user-email">可选参数</label>
                   <div class="row g-3">
-                    <div class="col-12 col-md-12">
+                    <div class="col-12 d-flex flex-wrap">
                       <input class="form-control" placeholder="Include: 可选" v-model="moreConfig.include" />
                     </div>
-                    <div class="col-12 col-md-12">
+                    <div class="col-12 d-flex flex-wrap">
                       <input class="form-control" placeholder="Exclude: 可选" v-model="moreConfig.exclude" />
                     </div>
                     <div class="col-md check-div" :style="{ display: 'flex', flexWrap: 'wrap' }">
@@ -80,7 +81,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-12 col-md-12">
+                <div class="col-12">
                   <div class="divider divider-dashed">
                     <div class="divider-text"><i class="ti ti-refresh" style="color: gray"></i></div>
                   </div>
@@ -89,13 +90,13 @@
                   <input class="form-control" placeholder="点击转换链接" v-model.trim="result.subUrl" />
                 </div>
                 <div class="col-12 col-md-2">
-                  <button type="button" class="btn btn-success" @click="getSubUrl()">转换</button>
+                  <button type="button" class="btn btn-success w-100" @click="getSubUrl">转换</button>
                 </div>
                 <div class="col-12 col-md-10">
                   <input class="form-control" placeholder="点击获取短链" v-model.trim="result.shortUrl" />
                 </div>
                 <div class="col-12 col-md-2">
-                  <button type="button" class="btn btn-primary" @click="getShortUrl()">短链</button>
+                  <button type="button" class="btn btn-primary w-100" @click="getShortUrl">短链</button>
                 </div>
               </div>
             </div>
@@ -104,6 +105,14 @@
       </div>
     </div>
   </div>
+
+  <!-- 弹窗结构 -->
+  <dialog id="errorDialog" ref="errorDialog" class="glass-effect">
+    <div>
+      <p>{{ dialogMessage }}</p>
+      <button @click="closeDialog">关闭</button>
+    </div>
+  </dialog>
 </template>
 
 <script>
@@ -111,6 +120,7 @@ import { showLoading, hideLoading } from '@/components/loading';
 import { getSubLink, regexCheck } from './index.js';
 import { request } from '@/network';
 import showNotification from '@/components/notification';
+
 export default {
   name: 'SubTable',
   setup() {
@@ -134,6 +144,7 @@ export default {
         { value: 'clash', text: 'Clash' },
         { value: 'clashr', text: 'ClashR' },
         { value: 'v2ray', text: 'V2Ray' },
+        { value: 'singbox', text: 'Sing-box' },
         { value: 'quan', text: 'Quantumult' },
         { value: 'quanx', text: 'Quantumult X' },
         { value: 'surge&ver=2', text: 'SurgeV2' },
@@ -145,7 +156,6 @@ export default {
         { value: 'ssd', text: 'SSD' },
         { value: 'ssr', text: 'SSR' },
         { value: 'loon', text: 'Loon' },
-        { value: 'singbox', text: 'Sing-box' },
       ],
       apiUrl: window.config.apiUrl,
       shortUrl: window.config.shortUrl,
@@ -162,6 +172,7 @@ export default {
       api: window.config.apiUrl,
       target: 'clash',
       remoteConfig: '',
+      dialogMessage: '',  // 新增变量，用于存储弹窗的消息内容
     };
   },
   methods: {
@@ -188,7 +199,8 @@ export default {
     },
     toCopy(url, title) {
       if (!url) {
-        this.$showDialog('warning', '注意', '复制失败 内容为空');
+        this.dialogMessage = '复制失败 内容为空';
+        this.openDialog();
         return;
       }
       var copyInput = document.createElement('input');
@@ -202,24 +214,27 @@ export default {
           showNotification(title + ' 复制成功', '成功');
         }
       } catch {
-        this.$showDialog('warning', '注意', '复制失败，请检查浏览器兼容性');
+        this.dialogMessage = '复制失败，请检查浏览器兼容性';
+        this.openDialog();
       }
     },
     getConverter() {
       if (this.urls == '') {
-        this.$showDialog('warning', '注意', '请输入订阅链接或节点');
+        this.dialogMessage = '请输入订阅链接或节点';
+        this.openDialog();
         return false;
       }
       if (!regexCheck(this.api)) {
-        this.$showDialog('warning', '注意', '请输入自定义后端 API 地址，或选择默认后端服务。');
+        this.dialogMessage = '请输入自定义后端 API 地址，或选择默认后端服务。';
+        this.openDialog();
         return false;
       }
       if (this.remoteConfig == '' && this.isShowRemoteConfig) {
-        this.$showDialog('warning', '注意', '请输入远程配置地址，或选择默认配置。');
+        this.dialogMessage = '请输入远程配置地址，或选择默认配置。';
+        this.openDialog();
         return false;
       }
       if (this.api.endsWith('/')) {
-        // 自动删除末尾的斜杠
         this.api = this.api.slice(0, -1);
       }
       this.result.subUrl = getSubLink(
@@ -261,50 +276,61 @@ export default {
           hideLoading();
         })
         .catch(() => {
-          this.$showDialog('error', '失败', '短链接生成失败 请检查短链接服务是否可用');
+          this.dialogMessage = '短链接生成失败 请检查短链接服务是否可用';
+          this.openDialog();
           hideLoading();
         });
+    },
+    openDialog() {
+      const dialog = this.$refs.errorDialog;
+      dialog.showModal();
+    },
+    closeDialog() {
+      const dialog = this.$refs.errorDialog;
+      dialog.close();
     },
   },
 };
 </script>
 
 <style scoped>
-.custom-div {
-  width: 100%;
-  margin: 0 auto;
-}
-@media (min-width: 767.98px) {
-  .custom-div {
-    width: 90%;
-    margin: 0 auto;
-  }
-}
-@media (min-width: 991.98px) {
-  .custom-div {
-    width: 80%;
-    margin: 0 auto;
-  }
-}
-@media (min-width: 1199.98px) {
-  .custom-div {
-    width: 70%;
-    margin: 0 auto;
-  }
+/* 毛玻璃效果样式 */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.btn {
-  width: 100%;
+/* 弹窗样式 */
+dialog {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  text-align: center;
+}
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
 }
 
-.check-div {
-  display: flex;
-  justify-content: center; /* 水平居中 */
-  align-items: center; /* 垂直居中 */
-  height: 100%; /* 可以设置固定高度或者根据需求调整 */
+/* 按钮样式 */
+button {
+  background-color: #008BFF;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-.divider {
-  margin: 1%;
+button:hover {
+  background-color: #FF7F50;
 }
 </style>

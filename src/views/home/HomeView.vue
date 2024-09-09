@@ -2,9 +2,8 @@
   <section id="hero-animation">
     <div id="landingHero" class="section-py landing-hero position-relative">
       <div class="container">
-        <div class="hero-text-box text-center">
-          <h1 class="text-primary display-6 fw-bold">Subconverter 订阅转换</h1>
-          <!-- <h2 class="hero-sub-title h6 mb-4 pb-1">Subconverter 订阅转换支持 Clash QuantumultX Surge 等主流软件</h2> -->
+        <div class="hero-text-box text-center transparent-background">
+          <!-- 可以在这里添加内容 -->
         </div>
         <div class="hero-animation-img">
           <SubTable />
@@ -17,6 +16,7 @@
 
 <script>
 import SubTable from './SubTable.vue';
+
 export default {
   name: 'SubconverterView',
   components: {
@@ -26,35 +26,50 @@ export default {
 </script>
 
 <style scoped>
-.light-style .landing-hero {
-  background: linear-gradient(338.18deg, #fafaff 0%, #ececec 94.44%);
+.landing-hero {
+  background: url('/public/doraemon-desktop.png') no-repeat center center;
+  background-size: cover;
+  min-height: 100vh;
+  border-radius: 0;
+  padding-top: 2rem; /* 减少顶部间距 */
 }
-.landing-hero .hero-animation-img {
-  margin-bottom: -24rem;
-}
-@media (max-width: 1199.98px) {
-  .landing-hero .hero-animation-img {
-    margin-bottom: -18rem;
-  }
-}
+
+/* 为手机屏幕设置不同的背景图片 */
 @media (max-width: 575.98px) {
-  .landing-hero .hero-animation-img {
-    margin-bottom: -10rem;
+  .landing-hero {
+    background: url('/public/doraemon-mobile.png') no-repeat center center;
+    background-size: cover;
   }
 }
 
-/* Landing Hero Blank */
-.landing-hero-blank {
-  padding-top: 20rem;
+.transparent-background {
+  background-color: transparent !important;
 }
+
+.hero-text-box {
+  background: transparent;
+  padding: 1.5rem 0; /* 减少内容区的上下内边距 */
+}
+
+.landing-hero .hero-animation-img {
+  margin-bottom: 0;
+  padding-top: 3rem; /* 减少顶部内边距 */
+}
+
 @media (max-width: 1199.98px) {
-  .landing-hero-blank {
-    padding-top: 15rem;
+  .landing-hero .hero-animation-img {
+    padding-top: 2.5rem; /* 调整小屏幕下的顶部内边距 */
   }
 }
+
 @media (max-width: 575.98px) {
-  .landing-hero-blank {
-    padding-top: 7rem;
+  .landing-hero .hero-animation-img {
+    padding-top: 2rem; /* 调整手机屏幕下的顶部内边距 */
   }
+}
+
+.landing-hero-blank {
+  padding-top: 0;
+  min-height: 0;
 }
 </style>
