@@ -4,8 +4,7 @@
       <div class="container" style="text-align: center">
         <div class="mb-2 mb-md-0">
            <a><img style='display:inline-block;vertical-align:middle' alt="本站支持IPv6访问" src="https://static.ipw.cn/icon/ipv6-s4.svg"><br></a>
-           <span>Design By 小石头 | Support IPv6.<br></span> 
-           <span>Copyright © 2024 小石头的订阅转换. All rights reserved.</span>
+           <span>Copyright © 订阅转换 - 小石头. All rights reserved.</span>
         </div>
       </div>
     </div>
